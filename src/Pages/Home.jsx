@@ -13,14 +13,21 @@ class Home extends React.Component {
       waitingSearch: true,
       searchProduct: '',
       searchResult: [],
+      category: '',
     });
   }
 
   getValue({ target }) {
     const { name, value } = target;
-    console.log('entrada input', name, value);
-    this.setState({
+    console.log('entrada getValue --', name, value);
+    this.setState(() => ({
       [name]: value,
+    }),
+    () => {
+      if (name === 'category') {
+        const { searchProduct, category } = this.state;
+        this.getProducts(category, searchProduct);
+      }
     });
   }
 
@@ -31,10 +38,6 @@ class Home extends React.Component {
       waitingSearch: false,
       searchResult: results,
     });
-    // this.setState(() => ({
-    //   waitingSearch: false,
-    //   searchResult: results,
-    // }));
   }
 
   render() {
@@ -42,6 +45,7 @@ class Home extends React.Component {
       searchProduct,
       waitingSearch,
       searchResult,
+      category,
     } = this.state;
 
     return (
@@ -57,7 +61,7 @@ class Home extends React.Component {
           />
           <button
             type="button"
-            onClick={ () => this.getProducts('', searchProduct) }
+            onClick={ () => this.getProducts(category, searchProduct) }
             data-testid="query-button"
           >
             Buscar
@@ -83,7 +87,9 @@ class Home extends React.Component {
             )
             : <p>Nenhum produto foi encontrado</p>}
         </main>
-        <Categories />
+        <Categories
+          handleClick={ this.getValue }
+        />
       </>
     );
   }
