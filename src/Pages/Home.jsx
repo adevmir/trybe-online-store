@@ -2,6 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { getProductsFromCategoryAndQuery } from '../services/api';
 import Categories from '../Components/Categories';
+import ProductListing from '../Components/ProductListing';
 
 class Home extends React.Component {
   constructor() {
@@ -56,7 +57,7 @@ class Home extends React.Component {
           />
           <button
             type="button"
-            onClick={ () => console.log('entrada button', searchProduct) }
+            onClick={ () => this.getProducts('', searchProduct) }
             data-testid="query-button"
           >
             Buscar
@@ -64,9 +65,23 @@ class Home extends React.Component {
           <Link data-testid="shopping-cart-button" to="/shopping-cart">
             Carrinho
           </Link>
-          <p data-testid="home-initial-message">
-            Digite algum termo de pesquisa ou escolha uma categoria.
-          </p>
+          {waitingSearch && (
+            <p data-testid="home-initial-message">
+              Digite algum termo de pesquisa ou escolha uma categoria.
+            </p>
+          )}
+          {searchResult.length > 0
+            ? (
+              searchResult.map(({ id, title, price, thumbnail }) => (
+                <ProductListing
+                  key={ id }
+                  title={ title }
+                  price={ price }
+                  thumbnail={ thumbnail }
+                />
+              ))
+            )
+            : <p>Nenhum produto foi encontrado</p>}
         </main>
         <Categories />
       </>
