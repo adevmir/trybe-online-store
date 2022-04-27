@@ -30,6 +30,7 @@ class Categories extends React.Component {
                 <button
                   name="category"
                   value={ id }
+                  // Chamada da função
                   onClick={ handleClick }
                   data-testid="category"
                   type="button"

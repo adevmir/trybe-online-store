@@ -23,6 +23,7 @@ class Home extends React.Component {
     this.setState(() => ({
       [name]: value,
     }),
+    // Executa essa arrow function apenas qnd clicado em uma categoria
     () => {
       if (name === 'category') {
         const { searchProduct, category } = this.state;
@@ -88,6 +89,7 @@ class Home extends React.Component {
             : <p>Nenhum produto foi encontrado</p>}
         </main>
         <Categories
+          // Função que ira detectar o evento e dispara seus acontecimentos
           handleClick={ this.getValue }
         />
       </>
