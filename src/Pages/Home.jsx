@@ -80,6 +80,7 @@ class Home extends React.Component {
               searchResult.map(({ id, title, price, thumbnail }) => (
                 <ProductListing
                   key={ id }
+                  id={ id }
                   title={ title }
                   price={ price }
                   thumbnail={ thumbnail }
