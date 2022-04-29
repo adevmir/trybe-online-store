@@ -14,7 +14,7 @@ class ProductListing extends React.Component {
       <Link data-testid="product-detail-link" to={ `/product-details/${id}` }>
         <div data-testid="product">
           {/* Nome do produto - results[n].title */}
-          <h2>{title}</h2>
+          <h2 data-testid="shopping-cart-product-name">{title}</h2>
           {/* Foto do produto - results[n].thumbnail */}
           <img src={ thumbnail } alt={ title } />
           {/* Preço do Priduto - results[n].price */}

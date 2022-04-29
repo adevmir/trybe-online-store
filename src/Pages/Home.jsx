@@ -9,11 +9,15 @@ class Home extends React.Component {
     super();
     this.getValue = this.getValue.bind(this);
     this.getProducts = this.getProducts.bind(this);
+    this.shopClick = this.shopClick.bind(this);
+    this.cartItemsCounter = this.cartItemsCounter.bind(this);
     this.state = ({
       waitingSearch: true,
       searchProduct: '',
       searchResult: [],
       category: '',
+      shopCart: ['empty'],
+      itemsCart: 0,
     });
   }
 
@@ -41,12 +45,42 @@ class Home extends React.Component {
     });
   }
 
+  cartItemsCounter() {
+    console.log('Entrou em cartItemsCounter');
+    const { shopCart } = this.state;
+    if (shopCart[0] !== 'empty') {
+      this.setState({
+        itemsCart: shopCart.length,
+      });
+    }
+  }
+
+  shopClick(idProduct) {
+    const { shopCart } = this.state;
+    console.log('Entrou no shopClick');
+    if (shopCart[0] === 'empty') {
+      this.setState(() => ({
+        shopCart: [],
+      }),
+      this.setState((old) => ({
+        shopCart: [...old.shopCart, idProduct],
+      }),
+      this.cartItemsCounter));
+    }
+    this.setState((old) => ({
+      shopCart: [...old.shopCart, idProduct],
+    }),
+    this.cartItemsCounter);
+  }
+
   render() {
     const {
       searchProduct,
       waitingSearch,
       searchResult,
       category,
+      shopCart,
+      itemsCart,
     } = this.state;
 
     return (
@@ -67,8 +101,13 @@ class Home extends React.Component {
           >
             Buscar
           </button>
-          <Link data-testid="shopping-cart-button" to="/shopping-cart">
+          <Link
+            data-testid="shopping-cart-button"
+            to={ `/shopping-cart/${shopCart}` }
+          >
             Carrinho
+            {/* Quantidade de itens no carrinho */}
+            <span data-testid="shopping-cart-product-quantity">{ itemsCart }</span>
           </Link>
           {waitingSearch && (
             <p data-testid="home-initial-message">
@@ -78,13 +117,23 @@ class Home extends React.Component {
           {searchResult.length > 0
             ? (
               searchResult.map(({ id, title, price, thumbnail }) => (
-                <ProductListing
-                  key={ id }
-                  id={ id }
-                  title={ title }
-                  price={ price }
-                  thumbnail={ thumbnail }
-                />
+                <div key={ id }>
+                  {/* Renderiza os produtos na tela */}
+                  <ProductListing
+                    id={ id }
+                    title={ title }
+                    price={ price }
+                    thumbnail={ thumbnail }
+                  />
+                  {/* Botão que permite adicionar o produto ao carrinho */}
+                  <button
+                    type="button"
+                    onClick={ () => this.shopClick(id) }
+                    data-testid="product-add-to-cart"
+                  >
+                    Comprar
+                  </button>
+                </div>
               ))
             )
             : <p>Nenhum produto foi encontrado</p>}
