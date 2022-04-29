@@ -3,7 +3,12 @@ import React from 'react';
 class Home extends React.Component {
   render() {
     return (
-      <h2>Pagina Home</h2>
+      <main>
+        <h2>Página Home</h2>
+        <h3 data-testid="home-initial-message">
+          Digite algum termo de pesquisa ou escolha uma categoria.
+        </h3>
+      </main>
     );
   }
 }
