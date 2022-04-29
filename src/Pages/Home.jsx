@@ -1,5 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import PropTypes from 'prop-types';
 import { getProductsFromCategoryAndQuery } from '../services/api';
 import Categories from '../Components/Categories';
 import ProductListing from '../Components/ProductListing';
@@ -9,11 +10,14 @@ class Home extends React.Component {
     super();
     this.getValue = this.getValue.bind(this);
     this.getProducts = this.getProducts.bind(this);
+    this.shopClick = this.shopClick.bind(this);
+    this.cartItemsCounter = this.cartItemsCounter.bind(this);
     this.state = ({
       waitingSearch: true,
       searchProduct: '',
       searchResult: [],
       category: '',
+      shopCart: ['empty'],
     });
   }
 
@@ -41,17 +45,50 @@ class Home extends React.Component {
     });
   }
 
+  // Consta quantos itens tem no carrinho de compras
+  cartItemsCounter() {
+    const { updateState } = this.props;
+    const { shopCart } = this.state;
+    if (shopCart[0] !== 'empty') {
+      updateState(shopCart);
+    }
+  }
+
+  // Adiciona itens carrinho
+  shopClick(idProduct) {
+    const { updateState } = this.props;
+    updateState(idProduct);
+    const { shopCart } = this.state;
+    console.log('Entrou no shopClick');
+    if (shopCart[0] === 'empty') {
+      this.setState(() => ({
+        shopCart: [],
+      }),
+      this.setState((old) => ({
+        shopCart: [...old.shopCart, idProduct],
+      }),
+      this.cartItemsCounter));
+    }
+    this.setState((old) => ({
+      shopCart: [...old.shopCart, idProduct],
+    }),
+    this.cartItemsCounter);
+  }
+
   render() {
     const {
       searchProduct,
       waitingSearch,
       searchResult,
       category,
+      // shopCart,
     } = this.state;
+    const { quantityCart } = this.props;
 
     return (
       <>
         <main>
+          <div>{ quantityCart }</div>
           <input
             type="text"
             name="searchProduct"
@@ -67,8 +104,13 @@ class Home extends React.Component {
           >
             Buscar
           </button>
-          <Link data-testid="shopping-cart-button" to="/shopping-cart">
+          <Link
+            data-testid="shopping-cart-button"
+            to="/shopping-cart"
+          >
             Carrinho
+            {/* Quantidade de itens no carrinho */}
+            <span>{ quantityCart }</span>
           </Link>
           {waitingSearch && (
             <p data-testid="home-initial-message">
@@ -78,13 +120,23 @@ class Home extends React.Component {
           {searchResult.length > 0
             ? (
               searchResult.map(({ id, title, price, thumbnail }) => (
-                <ProductListing
-                  key={ id }
-                  id={ id }
-                  title={ title }
-                  price={ price }
-                  thumbnail={ thumbnail }
-                />
+                <div key={ id }>
+                  {/* Renderiza os produtos na tela */}
+                  <ProductListing
+                    id={ id }
+                    title={ title }
+                    price={ price }
+                    thumbnail={ thumbnail }
+                  />
+                  {/* Botão que permite adicionar o produto ao carrinho */}
+                  <button
+                    type="button"
+                    onClick={ () => this.shopClick(id) }
+                    data-testid="product-add-to-cart"
+                  >
+                    Comprar
+                  </button>
+                </div>
               ))
             )
             : <p>Nenhum produto foi encontrado</p>}
@@ -97,5 +149,10 @@ class Home extends React.Component {
     );
   }
 }
+
+Home.propTypes = {
+  updateState: PropTypes.func.isRequired,
+  quantityCart: PropTypes.number.isRequired,
+};
 
 export default Home;
