@@ -1,6 +1,8 @@
 import React from 'react';
 import { BrowserRouter, Switch, Route } from 'react-router-dom';
 import Home from './Pages/Home';
+import ShoppingCart from './Pages/ShoppingCart';
+// import ProductDetails from './Pages/ProductDetails';
 
 class Main extends React.Component {
   render() {
@@ -11,14 +13,19 @@ class Main extends React.Component {
             Grupo 41 Store(Cabeçalho)
           </h1>
         </header>
-        <main>
-          A main é aqui
-          <BrowserRouter>
-            <Switch>
-              <Route path="/" component={ Home } />
-            </Switch>
-          </BrowserRouter>
-        </main>
+        A main é aqui
+        <BrowserRouter>
+          <Switch>
+            {/* Rota para Home */}
+            <Route exact path="/" component={ Home } />
+
+            {/* Rota para o Carrinho de Compras */}
+            <Route path="/shopping-cart" component={ ShoppingCart } />
+
+            {/* Rota para Detalhes do produto */}
+            {/* <Route path="/product-details" component={ ProductDetails } /> */}
+          </Switch>
+        </BrowserRouter>
         <footer>
           <h5>
             Since 2022(Rodapé)
