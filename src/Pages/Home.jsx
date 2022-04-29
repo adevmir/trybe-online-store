@@ -1,5 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import PropTypes from 'prop-types';
 import { getProductsFromCategoryAndQuery } from '../services/api';
 import Categories from '../Components/Categories';
 import ProductListing from '../Components/ProductListing';
@@ -17,7 +18,6 @@ class Home extends React.Component {
       searchResult: [],
       category: '',
       shopCart: ['empty'],
-      itemsCart: 0,
     });
   }
 
@@ -45,17 +45,19 @@ class Home extends React.Component {
     });
   }
 
+  // Consta quantos itens tem no carrinho de compras
   cartItemsCounter() {
-    console.log('Entrou em cartItemsCounter');
+    const { updateState } = this.props;
     const { shopCart } = this.state;
     if (shopCart[0] !== 'empty') {
-      this.setState({
-        itemsCart: shopCart.length,
-      });
+      updateState(shopCart);
     }
   }
 
+  // Adiciona itens carrinho
   shopClick(idProduct) {
+    const { updateState } = this.props;
+    updateState(idProduct);
     const { shopCart } = this.state;
     console.log('Entrou no shopClick');
     if (shopCart[0] === 'empty') {
@@ -79,13 +81,14 @@ class Home extends React.Component {
       waitingSearch,
       searchResult,
       category,
-      shopCart,
-      itemsCart,
+      // shopCart,
     } = this.state;
+    const { quantityCart } = this.props;
 
     return (
       <>
         <main>
+          <div>{ quantityCart }</div>
           <input
             type="text"
             name="searchProduct"
@@ -103,11 +106,11 @@ class Home extends React.Component {
           </button>
           <Link
             data-testid="shopping-cart-button"
-            to={ `/shopping-cart/${shopCart}` }
+            to="/shopping-cart"
           >
             Carrinho
             {/* Quantidade de itens no carrinho */}
-            <span data-testid="shopping-cart-product-quantity">{ itemsCart }</span>
+            <span>{ quantityCart }</span>
           </Link>
           {waitingSearch && (
             <p data-testid="home-initial-message">
@@ -146,5 +149,10 @@ class Home extends React.Component {
     );
   }
 }
+
+Home.propTypes = {
+  updateState: PropTypes.func.isRequired,
+  quantityCart: PropTypes.number.isRequired,
+};
 
 export default Home;

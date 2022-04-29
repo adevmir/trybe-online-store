@@ -13,13 +13,10 @@ class ShoppingCart extends React.Component {
   }
 
   componentDidMount() {
-    console.log('Entrou no componentDidMount do ShoppingCart');
-    const { match: { params: { shopCart } } } = this.props;
-    if (shopCart !== 'empty') {
-      const arrayIds = shopCart.split(',');
-      arrayIds.forEach(async (id) => {
+    const { fatherList } = this.props;
+    if (fatherList.length > 0) {
+      fatherList.forEach(async (id) => {
         const infoProduct = await getDetails(id);
-        // console.log('InfoProduct', infoProduct);
         this.setState((old) => ({
           shoppingList: [...old.shoppingList, infoProduct],
         }));
@@ -29,6 +26,9 @@ class ShoppingCart extends React.Component {
 
   render() {
     const { shoppingList } = this.state;
+    const { fatherList, quantityCart } = this.props;
+    console.log('ShoppingPage, recebeu isso do pai', Array.isArray(fatherList));
+
     return (
       <main>
         {shoppingList.length > 0
@@ -41,14 +41,10 @@ class ShoppingCart extends React.Component {
                 price={ price }
                 thumbnail={ thumbnail }
               />
-              // <div key={ index }>
-              //   <h2 data-testid="shopping-cart-product-name">{ title }</h2>
-              //   <img src={ thumbnail } alt={ title } />
-              //   <p>{ price }</p>
-              // </div>
             ))
           )
           : <p data-testid="shopping-cart-empty-message">Seu carrinho está vazio</p>}
+        <span data-testid="shopping-cart-product-quantity">{quantityCart}</span>
         <Link to="/">
           Continuar comprando
         </Link>
@@ -58,11 +54,8 @@ class ShoppingCart extends React.Component {
 }
 
 ShoppingCart.propTypes = {
-  match: PropTypes.shape({
-    params: PropTypes.shape({
-      shopCart: PropTypes.arrayOf(PropTypes.array),
-    }),
-  }).isRequired,
+  fatherList: PropTypes.arrayOf(PropTypes.string).isRequired,
+  quantityCart: PropTypes.number.isRequired,
 };
 
 export default ShoppingCart;
