@@ -11,6 +11,7 @@ class ProductListing extends React.Component {
       id,
     } = this.props;
     return (
+      // Exibição resumida dos detalhes dos produtos, já com link para detalhes daquele clicado
       <Link
         to={ `/product-details/${id}` }
         data-testid="product-detail-link"
