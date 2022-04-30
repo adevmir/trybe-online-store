@@ -32,6 +32,7 @@ class ShoppingCart extends React.Component {
 
   render() {
     const { shoppingList, totalItems } = this.state;
+    const { addItemCart, removeItemCart } = this.props;
     return (
       <main>
         <h2>Página do Carrinho de Compras</h2>
@@ -50,15 +51,20 @@ class ShoppingCart extends React.Component {
                     <div>
                       <button
                         type="button"
+                        onClick={ () => removeItemCart(id) }
                         data-testid="product-decrease-quantity"
                       >
                         -
                       </button>
 
                       <span>{quantity}</span>
+                      {/*
+                        As funções funcionam, mas a pagina não carrega os dados novos
+                      */}
 
                       <button
                         type="button"
+                        onClick={ () => addItemCart(id) }
                         data-testid="product-increase-quantity"
                       >
                         +
@@ -85,6 +91,8 @@ class ShoppingCart extends React.Component {
 
 ShoppingCart.propTypes = {
   listItems: PropTypes.arrayOf(PropTypes.object).isRequired,
+  addItemCart: PropTypes.func.isRequired,
+  removeItemCart: PropTypes.func.isRequired,
 };
 
 export default ShoppingCart;
