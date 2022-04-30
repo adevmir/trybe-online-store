@@ -39,14 +39,32 @@ class ShoppingCart extends React.Component {
           ? (
             <div>
               {
-                shoppingList.map(({ id, title, price, thumbnail }) => (
-                  <ProductListing
-                    key={ id }
-                    id={ id }
-                    title={ title }
-                    price={ price }
-                    thumbnail={ thumbnail }
-                  />
+                shoppingList.map(({ id, title, price, thumbnail, quantity }) => (
+                  <div key={ id }>
+                    <ProductListing
+                      id={ id }
+                      title={ title }
+                      price={ price }
+                      thumbnail={ thumbnail }
+                    />
+                    <div>
+                      <button
+                        type="button"
+                        data-testid="product-decrease-quantity"
+                      >
+                        -
+                      </button>
+
+                      <span>{quantity}</span>
+
+                      <button
+                        type="button"
+                        data-testid="product-increase-quantity"
+                      >
+                        +
+                      </button>
+                    </div>
+                  </div>
                 ))
               }
               <p
