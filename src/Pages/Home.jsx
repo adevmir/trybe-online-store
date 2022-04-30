@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import LinkShopCart from '../Components/LinkShopCart';
 import ProductListing from '../Components/ProductListing';
 import Categories from '../Components/Categories';
@@ -81,6 +82,11 @@ class Home extends React.Component {
       listSearchedItems,
       waitingSearch,
     } = this.state;
+
+    const {
+      addItemCart,
+    } = this.props;
+
     return (
       <>
         <h2>Página Home</h2>
@@ -120,13 +126,23 @@ class Home extends React.Component {
           {listSearchedItems.length > 0 && listSearchedItems[0] !== 'Empty' && (
             // Resultado se alo for encontrado
             listSearchedItems.map(({ id, title, price, thumbnail }) => (
-              <ProductListing
-                key={ id }
-                id={ id }
-                title={ title }
-                price={ price }
-                thumbnail={ thumbnail }
-              />
+              <div key={ id }>
+                <ProductListing
+                  id={ id }
+                  title={ title }
+                  price={ price }
+                  thumbnail={ thumbnail }
+                />
+
+                {/* Botão que adiciona itens ao carrinho */}
+                <button
+                  type="button"
+                  onClick={ () => addItemCart(id) }
+                  data-testid="product-add-to-cart"
+                >
+                  Adicionar ao Carrinho
+                </button>
+              </div>
             ))
           )}
           {listSearchedItems.length === 0 && (
@@ -141,5 +157,9 @@ class Home extends React.Component {
     );
   }
 }
+
+Home.propTypes = {
+  addItemCart: PropTypes.func.isRequired,
+};
 
 export default Home;
