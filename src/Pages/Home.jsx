@@ -37,16 +37,25 @@ class Home extends React.Component {
   //   const { category, product } = this.state;
   //   if (name === 'category') {
   //     // Se a categoria clicada já estiver marcada ela é desmarcada
+  //     console.log('Entrou no if de categoria');
   //     if (category === value) {
+  //       console.log('Entrou no if de repetido');
   //       this.setState(() => ({
   //         category: '',
   //       }),
-  //       () => this.getProducts(category, product));
+  //       () => {
+  //         console.log('A busca foi feita');
+  //         this.getProducts(category, product);
+  //       });
   //     } else {
+  //       console.log('É um categoria nova');
   //       this.setState(() => ({
   //         category: value,
   //       }),
-  //       () => this.getProducts(category, product));
+  //       () => {
+  //         console.log('A busca foi feita');
+  //         this.getProducts(category, product);
+  //       });
   //     }
   //   } else {
   //     this.setState({
