@@ -92,7 +92,10 @@ class Main extends React.Component {
             {/* Rota para Detalhes do produto */}
             <Route
               path="/product-details/:id"
-              render={ (props) => <ProductDetails { ...props } /> }
+              render={ (props) => (<ProductDetails
+                { ...props }
+                addItemCart={ this.addCart }
+              />) }
             />
           </Switch>
         </BrowserRouter>
