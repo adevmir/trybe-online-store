@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { Link } from 'react-router-dom';
 import LinkShopCart from '../Components/LinkShopCart';
 import { getDetails } from '../services/api';
 
@@ -30,6 +31,7 @@ class ProductDetails extends React.Component {
     return (
       <main>
         <h2>Página de Detalhes</h2>
+        <Link to="/">Voltar a Home</Link>
         <div id={ id }>
           <h2 data-testid="product-detail-name">{ title }</h2>
           <img src={ thumbnail } alt={ title } />
