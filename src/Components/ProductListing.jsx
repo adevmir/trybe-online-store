@@ -21,7 +21,7 @@ class ProductListing extends React.Component {
           data-testid="product"
         >
           {/* Nome do froduto */}
-          <h2>{ title }</h2>
+          <h2 data-testid="shopping-cart-product-name">{ title }</h2>
 
           {/* Foto do produto */}
           <img src={ thumbnail } alt={ `Imagem de ${title}.` } />
