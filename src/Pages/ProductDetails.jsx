@@ -26,21 +26,27 @@ class ProductDetails extends React.Component {
   render() {
     const { details } = this.state;
     const { id, title, price, pictures, thumbnail } = details;
-    console.log(Array.isArray(pictures));
     console.log(pictures);
+    const { addItemCart } = this.props;
     return (
       <main>
         <div>
           <h2>Página de Detalhes</h2>
           <Link to="/">Voltar a Home</Link>
           <div id={ id }>
-            <h2 data-testid="product-detail-name">{ title }</h2>
+            <h2
+              data-testid="product-detail-name"
+            >
+              { title }
+            </h2>
             <img src={ thumbnail } alt={ title } />
             <p>{`R$ ${price}`}</p>
           </div>
         </div>
         <button
           type="button"
+          onClick={ () => addItemCart(id) }
+          data-testid="product-detail-add-to-cart"
         >
           Adicionar ao Carrinho
         </button>
@@ -56,6 +62,7 @@ ProductDetails.propTypes = {
       id: PropTypes.string,
     }),
   }).isRequired,
+  addItemCart: PropTypes.func.isRequired,
 };
 
 export default ProductDetails;
