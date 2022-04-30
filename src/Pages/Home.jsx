@@ -10,6 +10,7 @@ class Home extends React.Component {
     super();
     this.getValue = this.getValue.bind(this);
     this.getProducts = this.getProducts.bind(this);
+    // this.totalShopCart = this.totalShopCart.bind(this);
     this.state = ({
       category: '',
       product: '',
@@ -75,6 +76,17 @@ class Home extends React.Component {
     });
   }
 
+  // totalShopCart() {
+  //   const { listItems } = this.props;
+  //   let total = 0;
+  //   listItems.forEach((product) => {
+  //     total += product.quantity;
+  //   });
+  //   this.setState({
+  //     quantityItemsShopCart: total,
+  //   });
+  // }
+
   render() {
     const {
       product,
@@ -113,6 +125,8 @@ class Home extends React.Component {
 
         {/* Link para o carrinho de compras */}
         <LinkShopCart />
+        {/* <p>{quantityItemsShopCart}</p> */}
+        {/* <p>{`Você tem ${quantityItemsShopCart} item(ns) no carrinho.`}</p> */}
 
         <main>
           {/* Mensagem inicial */}
@@ -160,6 +174,7 @@ class Home extends React.Component {
 
 Home.propTypes = {
   addItemCart: PropTypes.func.isRequired,
+  // listItems: PropTypes.arrayOf(PropTypes.object).isRequired,
 };
 
 export default Home;

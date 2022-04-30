@@ -75,6 +75,7 @@ class Main extends React.Component {
               render={ () => (
                 <Home
                   addItemCart={ this.addCart }
+                  listItems={ shoppingList }
                 />) }
             />
 
