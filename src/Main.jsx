@@ -8,6 +8,7 @@ class Main extends React.Component {
   constructor() {
     super();
     this.addCart = this.addCart.bind(this);
+    this.removeItem = this.removeItem.bind(this);
     this.state = ({
       shoppingList: [],
     });
@@ -56,6 +57,36 @@ class Main extends React.Component {
     }
   }
 
+  removeItem(idProduct) {
+    console.log('Entrou');
+    const { shoppingList } = this.state;
+
+    shoppingList.forEach((infoProduct, index) => {
+      const reform = shoppingList;
+      if (infoProduct.id === idProduct) {
+        console.log('Achou o produto');
+        if (infoProduct.quantity === 1) {
+          console.log('Só tinha 1', infoProduct);
+          // Se houver apenas 1 item e o usuario excluir ele, o obj dele é removido
+          reform.splice(index, 1);
+          this.setState({
+            shoppingList: reform,
+          });
+        } else {
+          console.log('Tinha mais de 1', infoProduct);
+          const amount = infoProduct.quantity - 1;
+          reform[index] = {
+            id: infoProduct.id,
+            quantity: amount,
+          };
+          this.setState({
+            shoppingList: reform,
+          });
+        }
+      }
+    });
+  }
+
   render() {
     const { shoppingList } = this.state;
     return (
@@ -75,7 +106,6 @@ class Main extends React.Component {
               render={ () => (
                 <Home
                   addItemCart={ this.addCart }
-                  listItems={ shoppingList }
                 />) }
             />
 
@@ -86,6 +116,8 @@ class Main extends React.Component {
               render={ () => (
                 <ShoppingCart
                   listItems={ shoppingList }
+                  addItemCart={ this.addCart }
+                  removeItemCart={ this.removeItem }
                 />) }
             />
 
