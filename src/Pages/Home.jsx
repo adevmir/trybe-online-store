@@ -31,6 +31,31 @@ class Home extends React.Component {
     });
   }
 
+  // ---EM TESTES---
+  // getValue({ target }) {
+  //   const { name, value } = target;
+  //   const { category, product } = this.state;
+  //   if (name === 'category') {
+  //     // Se a categoria clicada já estiver marcada ela é desmarcada
+  //     if (category === value) {
+  //       this.setState(() => ({
+  //         category: '',
+  //       }),
+  //       () => this.getProducts(category, product));
+  //     } else {
+  //       this.setState(() => ({
+  //         category: value,
+  //       }),
+  //       () => this.getProducts(category, product));
+  //     }
+  //   } else {
+  //     this.setState({
+  //       product: value,
+  //     });
+  //   }
+  // }
+  // ---EM TESTES---
+
   // Pesquisa os produtos buscados pelo usuario
   async getProducts(category, product) {
     const { results } = await getProductsFromCategoryAndQuery(category, product);
@@ -100,7 +125,9 @@ class Home extends React.Component {
             <p>Nenhum produto foi encontrado</p>
           )}
         </main>
-        <Categories />
+        <Categories
+          handleClick={ this.getValue }
+        />
       </>
     );
   }
