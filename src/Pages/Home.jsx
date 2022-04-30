@@ -1,18 +1,107 @@
 import React from 'react';
 import LinkShopCart from '../Components/LinkShopCart';
+import ProductListing from '../Components/ProductListing';
+import Categories from '../Components/Categories';
+import { getProductsFromCategoryAndQuery } from '../services/api';
 
 class Home extends React.Component {
+  constructor() {
+    super();
+    this.getValue = this.getValue.bind(this);
+    this.getProducts = this.getProducts.bind(this);
+    this.state = ({
+      category: '',
+      product: '',
+      listSearchedItems: ['Empty'],
+      waitingSearch: true,
+    });
+  }
+
+  // Pega o que esta sendo buscado pelo usuario e coloca no state
+  getValue({ target }) {
+    const { name, value } = target;
+    this.setState(() => ({
+      [name]: value,
+    }),
+    () => {
+      if (name === 'category') {
+        const { category, product } = this.state;
+        this.getProducts(category, product);
+      }
+    });
+  }
+
+  // Pesquisa os produtos buscados pelo usuario
+  async getProducts(category, product) {
+    const { results } = await getProductsFromCategoryAndQuery(category, product);
+    this.setState({
+      waitingSearch: false,
+      listSearchedItems: results,
+    });
+  }
+
   render() {
+    const {
+      product,
+      category,
+      listSearchedItems,
+      waitingSearch,
+    } = this.state;
     return (
-      <main>
+      <>
         <h2>Página Home</h2>
+        {/* Onde o usuario digita o produto desejado e executa a busca */}
+        <div>
+          {/* Digita o que procura */}
+          <input
+            type="text"
+            name="product"
+            id="product"
+            value={ product }
+            onChange={ this.getValue }
+            data-testid="query-input"
+          />
+          {/* Dispara o evento de busca */}
+          <button
+            type="button"
+            data-testid="query-button"
+            onClick={ () => this.getProducts(category, product) }
+          >
+            Buscar
+          </button>
+        </div>
+
         {/* Link para o carrinho de compras */}
         <LinkShopCart />
-        {/* Mensagem inicial */}
-        <h3 data-testid="home-initial-message">
-          Digite algum termo de pesquisa ou escolha uma categoria.
-        </h3>
-      </main>
+
+        <main>
+          {/* Mensagem inicial */}
+          {waitingSearch && (
+            <h3 data-testid="home-initial-message">
+              Digite algum termo de pesquisa ou escolha uma categoria.
+            </h3>
+          )}
+
+          {/* Resultado da busca do usuario */}
+          {listSearchedItems.length > 0 && listSearchedItems[0] !== 'Empty' && (
+            // Resultado se alo for encontrado
+            listSearchedItems.map(({ id, title, price, thumbnail }) => (
+              <ProductListing
+                key={ id }
+                id={ id }
+                title={ title }
+                price={ price }
+                thumbnail={ thumbnail }
+              />
+            ))
+          )}
+          {listSearchedItems.length === 0 && (
+            // Resultado se nada for encontrado
+            <p>Nenhum produto foi encontrado</p>
+          )}
+        </main>
+        <Categories />
+      </>
     );
   }
 }
