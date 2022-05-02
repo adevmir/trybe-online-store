@@ -25,8 +25,7 @@ class ProductDetails extends React.Component {
 
   render() {
     const { details } = this.state;
-    const { id, title, price, pictures, thumbnail } = details;
-    console.log(pictures);
+    const { id, title, price, thumbnail } = details;
     const { addItemCart } = this.props;
     return (
       <main>
@@ -45,7 +44,7 @@ class ProductDetails extends React.Component {
         </div>
         <button
           type="button"
-          onClick={ () => addItemCart(id) }
+          onClick={ () => addItemCart(id, title, price, thumbnail) }
           data-testid="product-detail-add-to-cart"
         >
           Adicionar ao Carrinho

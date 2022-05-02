@@ -139,7 +139,7 @@ class Home extends React.Component {
                 {/* Botão que adiciona itens ao carrinho */}
                 <button
                   type="button"
-                  onClick={ () => addItemCart(id) }
+                  onClick={ () => addItemCart(id, title, price, thumbnail) }
                   data-testid="product-add-to-cart"
                 >
                   Adicionar ao Carrinho

@@ -2,45 +2,47 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import ProductListing from '../Components/ProductListing';
-import { getDetails } from '../services/api';
+// import { getDetails } from '../services/api';
 
 class ShoppingCart extends React.Component {
-  constructor() {
-    super();
-    this.state = ({
-      shoppingList: [],
-      totalItems: 0,
-    });
-  }
+  // constructor() {
+  //   super();
+  //   this.state = ({
+  //     shoppingList: [],
+  //     totalItems: 0,
+  //   });
+  // }
 
-  componentDidMount() {
-    let totalItems = 0;
-    const { listItems } = this.props;
-    if (listItems.length > 0) {
-      listItems.forEach(async ({ id, quantity }) => {
-        const infoProduct = await getDetails(id);
-        totalItems += quantity;
-        // Adiciona a quantidade de itens que o usuario adicionou a o obj com informações
-        infoProduct.quantity = quantity;
-        this.setState((old) => ({
-          shoppingList: [...old.shoppingList, infoProduct],
-          totalItems,
-        }));
-      });
-    }
-  }
+  // componentDidMount() {
+  //   let totalItems = 0;
+  //   const { listItems } = this.props;
+  //   if (listItems.length > 0) {
+  //     listItems.forEach(async ({ id, quantity }) => {
+  //       const infoProduct = await getDetails(id);
+  //       totalItems += quantity;
+  //       // Adiciona a quantidade de itens que o usuario adicionou a o obj com informações
+  //       infoProduct.quantity = quantity;
+  //       this.setState((old) => ({
+  //         shoppingList: [...old.shoppingList, infoProduct],
+  //         totalItems,
+  //       }));
+  //     });
+  //   }
+  // }
 
   render() {
-    const { shoppingList, totalItems } = this.state;
-    const { addItemCart, removeItemCart } = this.props;
+    // const { shoppingList, totalItems } = this.state;
+    const { addItemCart, removeItemCart, listItems, totalItems } = this.props;
+    console.log(listItems);
+    console.log(Array.isArray(listItems));
     return (
       <main>
         <h2>Página do Carrinho de Compras</h2>
-        {shoppingList.length > 0
+        {listItems.length > 0
           ? (
             <div>
               {
-                shoppingList.map(({ id, title, price, thumbnail, quantity }) => (
+                listItems.map(({ id, title, price, thumbnail, quantity }) => (
                   <div key={ id }>
                     <ProductListing
                       id={ id }
@@ -76,7 +78,8 @@ class ShoppingCart extends React.Component {
               <p
                 data-testid="shopping-cart-product-quantity"
               >
-                { `Você possui ${totalItems} item(ns) no carrinho.` }
+                {totalItems}
+                {/* { `Você possui ${totalItems} item(ns) no carrinho.` } */}
               </p>
             </div>
           )
@@ -93,6 +96,7 @@ ShoppingCart.propTypes = {
   listItems: PropTypes.arrayOf(PropTypes.object).isRequired,
   addItemCart: PropTypes.func.isRequired,
   removeItemCart: PropTypes.func.isRequired,
+  totalItems: PropTypes.number.isRequired,
 };
 
 export default ShoppingCart;

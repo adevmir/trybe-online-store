@@ -9,8 +9,10 @@ class Main extends React.Component {
     super();
     this.addCart = this.addCart.bind(this);
     this.removeItem = this.removeItem.bind(this);
+    this.quantityItems = this.quantityItems.bind(this);
     this.state = ({
       shoppingList: [],
+      total: 0,
     });
   }
   /*
@@ -23,35 +25,45 @@ class Main extends React.Component {
     }
   */
 
+  // Se quiser usar getDetails, pode ser valido chama-lo dentro de AddCart, qnd o obj não existir
+
   // Adiciona produto ao carrinho de compras
-  addCart(idProduct) {
+  addCart(productId, productTitle, productPrice, productThumbnail) {
     const { shoppingList } = this.state;
 
     // Verifica se o id já existe em shoppingList: true - já existe, false -ainda não existe
-    const idExists = shoppingList.some((product) => product.id === idProduct);
+    const idExists = shoppingList.some((product) => product.id === productId);
 
     // Caso o item ainda não tenha sido adicionado
     if (!idExists) {
       const itemObj = {
-        id: idProduct,
+        id: productId,
+        title: productTitle,
+        price: productPrice,
+        thumbnail: productThumbnail,
         quantity: 1,
       };
       this.setState((old) => ({
         shoppingList: [...old.shoppingList, itemObj],
-      }));
+      }),
+      () => this.quantityItems());
     } else {
       // Caso o item já tenha sido adicionado
       shoppingList.forEach((infoProduct, index) => {
-        if (infoProduct.id === idProduct) {
+        if (infoProduct.id === productId) {
           const amount = infoProduct.quantity + 1;
           const reform = shoppingList;
           reform[index] = {
             id: infoProduct.id,
+            title: infoProduct.title,
+            price: infoProduct.price,
+            thumbnail: infoProduct.thumbnail,
             quantity: amount,
           };
-          this.setState({
+          this.setState(() => ({
             shoppingList: reform,
-          });
+          }),
+          () => this.quantityItems());
         }
       });
     }
@@ -65,30 +77,48 @@ class Main extends React.Component {
       const reform = shoppingList;
       if (infoProduct.id === idProduct) {
         console.log('Achou o produto');
+        // Se houver apenas 1 item e o usuario excluir ele, o obj dele é removido
         if (infoProduct.quantity === 1) {
           console.log('Só tinha 1', infoProduct);
-          // Se houver apenas 1 item e o usuario excluir ele, o obj dele é removido
           reform.splice(index, 1);
-          this.setState({
+          this.setState(() => ({
             shoppingList: reform,
-          });
+          }),
+          () => this.quantityItems());
         } else {
+          // Caso haja mais de 1 do mesmo produto
           console.log('Tinha mais de 1', infoProduct);
           const amount = infoProduct.quantity - 1;
           reform[index] = {
             id: infoProduct.id,
+            title: infoProduct.title,
+            price: infoProduct.price,
+            thumbnail: infoProduct.thumbnail,
             quantity: amount,
           };
-          this.setState({
+          this.setState(() => ({
             shoppingList: reform,
-          });
+          }),
+          () => this.quantityItems());
         }
       }
     });
   }
 
-  render() {
+  quantityItems() {
+    console.log('Entrou no contador de quantidade');
     const { shoppingList } = this.state;
+    let total = 0;
+    shoppingList.forEach(({ quantity }) => {
+      total += quantity;
+    });
+    this.setState({
+      total,
+    });
+  }
+
+  render() {
+    const { shoppingList, total } = this.state;
     return (
       <>
         <header>
@@ -116,6 +146,7 @@ class Main extends React.Component {
               render={ () => (
                 <ShoppingCart
                   listItems={ shoppingList }
+                  totalItems={ total }
                   addItemCart={ this.addCart }
                   removeItemCart={ this.removeItem }
                 />) }
