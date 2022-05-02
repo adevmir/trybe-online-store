@@ -25,6 +25,7 @@ class ShoppingCart extends React.Component {
                       thumbnail={ thumbnail }
                     />
                     <div>
+                      {/* Botão para reminuir em um */}
                       <button
                         type="button"
                         onClick={ () => removeItemCart(id) }
@@ -33,11 +34,13 @@ class ShoppingCart extends React.Component {
                         -
                       </button>
 
+                      {/* Exibi quantos tem no carrinho */}
                       <span>{quantity}</span>
                       {/*
                         As funções funcionam, mas a pagina não carrega os dados novos
                       */}
 
+                      {/* Botão para acrecentar mais um */}
                       <button
                         type="button"
                         onClick={ () => addItemCart(id) }
