@@ -78,8 +78,7 @@ class ShoppingCart extends React.Component {
               <p
                 data-testid="shopping-cart-product-quantity"
               >
-                {totalItems}
-                {/* { `Você possui ${totalItems} item(ns) no carrinho.` } */}
+                { `Você possui ${totalItems} item(ns) no carrinho.` }
               </p>
             </div>
           )
