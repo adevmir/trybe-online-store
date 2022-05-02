@@ -5,35 +5,35 @@ import { getCategories } from '../services/api';
 class Categories extends React.Component {
   constructor() {
     super();
-    this.state = ({
-      categoriesList: [],
-    });
+    this.state = {
+      listCategories: [],
+    };
   }
 
   async componentDidMount() {
-    const categoriesList = await getCategories();
+    const listCategories = await getCategories();
     this.setState({
-      categoriesList,
+      listCategories,
     });
   }
 
   render() {
-    const { categoriesList } = this.state;
+    const { listCategories } = this.state;
     const { handleClick } = this.props;
+
     return (
       <aside>
         <ul>
           Categorias:
           {
-            categoriesList.map(({ id, name }) => (
+            listCategories.map(({ id, name }) => (
               <li key={ id }>
                 <button
                   name="category"
                   value={ id }
-                  // Chamada da função
                   onClick={ handleClick }
-                  data-testid="category"
                   type="button"
+                  data-testid="category"
                 >
                   { name }
                 </button>

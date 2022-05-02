@@ -1,6 +1,6 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
+import { Link } from 'react-router-dom';
 
 class ProductListing extends React.Component {
   render() {
@@ -11,18 +11,25 @@ class ProductListing extends React.Component {
       id,
     } = this.props;
     return (
-      <Link data-testid="product-detail-link" to={ `/product-details/${id}` }>
-        <div data-testid="product">
-          {/* Nome do produto - results[n].title */}
-          <h2 data-testid="shopping-cart-product-name">{title}</h2>
-          {/* Foto do produto - results[n].thumbnail */}
-          <img src={ thumbnail } alt={ title } />
-          {/* Preço do Priduto - results[n].price */}
-          <p>{price}</p>
-          {/* <p>{`R$ ${price}`}</p> */}
+      // Exibição resumida dos detalhes dos produtos, já com link para detalhes daquele clicado
+      <Link
+        to={ `/product-details/${id}` }
+        data-testid="product-detail-link"
+      >
+        <div
+          id={ id }
+          data-testid="product"
+        >
+          {/* Nome do froduto */}
+          <h2 data-testid="shopping-cart-product-name">{ title }</h2>
+
+          {/* Foto do produto */}
+          <img src={ thumbnail } alt={ `Imagem de ${title}.` } />
+
+          {/* Preço do produto */}
+          <p>{`R$ ${price}`}</p>
         </div>
       </Link>
-
     );
   }
 }

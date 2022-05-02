@@ -1,50 +1,63 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
-import { getDetails } from '../services/api';
 import ProductListing from '../Components/ProductListing';
 
 class ShoppingCart extends React.Component {
-  constructor() {
-    super();
-    this.state = ({
-      shoppingList: [],
-    });
-  }
-
-  componentDidMount() {
-    const { fatherList } = this.props;
-    if (fatherList.length > 0) {
-      fatherList.forEach(async (id) => {
-        const infoProduct = await getDetails(id);
-        this.setState((old) => ({
-          shoppingList: [...old.shoppingList, infoProduct],
-        }));
-      });
-    }
-  }
-
   render() {
-    const { shoppingList } = this.state;
-    const { fatherList, quantityCart } = this.props;
-    console.log('ShoppingPage, recebeu isso do pai', Array.isArray(fatherList));
-
+    // const { shoppingList, totalItems } = this.state;
+    const { addItemCart, removeItemCart, listItems, totalItems } = this.props;
+    console.log(listItems);
+    console.log(Array.isArray(listItems));
     return (
       <main>
-        {shoppingList.length > 0
+        <h2>Página do Carrinho de Compras</h2>
+        {listItems.length > 0
           ? (
-            shoppingList.map(({ id, title, price, thumbnail }, index) => (
-              <ProductListing
-                key={ index }
-                id={ id }
-                title={ title }
-                price={ price }
-                thumbnail={ thumbnail }
-              />
-            ))
+            <div>
+              {
+                listItems.map(({ id, title, price, thumbnail, quantity }) => (
+                  <div key={ id }>
+                    <ProductListing
+                      id={ id }
+                      title={ title }
+                      price={ price }
+                      thumbnail={ thumbnail }
+                    />
+                    <div>
+                      {/* Botão para reminuir em um */}
+                      <button
+                        type="button"
+                        onClick={ () => removeItemCart(id) }
+                        data-testid="product-decrease-quantity"
+                      >
+                        -
+                      </button>
+
+                      {/* Exibi quantos tem no carrinho */}
+                      <span data-testid="shopping-cart-product-quantity">{quantity}</span>
+                      {/*
+                        As funções funcionam, mas a pagina não carrega os dados novos
+                      */}
+
+                      {/* Botão para acrecentar mais um */}
+                      <button
+                        type="button"
+                        onClick={ () => addItemCart(id) }
+                        data-testid="product-increase-quantity"
+                      >
+                        +
+                      </button>
+                    </div>
+                  </div>
+                ))
+              }
+              <p>
+                { `Você possui ${totalItems} item(ns) no carrinho.` }
+              </p>
+            </div>
           )
-          : <p data-testid="shopping-cart-empty-message">Seu carrinho está vazio</p>}
-        <span data-testid="shopping-cart-product-quantity">{quantityCart}</span>
+          : (<h3 data-testid="shopping-cart-empty-message">Seu carrinho está vazio</h3>)}
         <Link to="/">
           Continuar comprando
         </Link>
@@ -54,8 +67,10 @@ class ShoppingCart extends React.Component {
 }
 
 ShoppingCart.propTypes = {
-  fatherList: PropTypes.arrayOf(PropTypes.string).isRequired,
-  quantityCart: PropTypes.number.isRequired,
+  listItems: PropTypes.arrayOf(PropTypes.object).isRequired,
+  addItemCart: PropTypes.func.isRequired,
+  removeItemCart: PropTypes.func.isRequired,
+  totalItems: PropTypes.number.isRequired,
 };
 
 export default ShoppingCart;
