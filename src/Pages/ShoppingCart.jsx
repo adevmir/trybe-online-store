@@ -35,7 +35,7 @@ class ShoppingCart extends React.Component {
                       </button>
 
                       {/* Exibi quantos tem no carrinho */}
-                      <span>{quantity}</span>
+                      <span data-testid="shopping-cart-product-quantity">{quantity}</span>
                       {/*
                         As funções funcionam, mas a pagina não carrega os dados novos
                       */}
@@ -52,9 +52,7 @@ class ShoppingCart extends React.Component {
                   </div>
                 ))
               }
-              <p
-                data-testid="shopping-cart-product-quantity"
-              >
+              <p>
                 { `Você possui ${totalItems} item(ns) no carrinho.` }
               </p>
             </div>
